@@ -25,8 +25,9 @@ class Board
 
   def make_move(start_pos, current_player_name)
     stones = @cups[start_pos]
+    @cups[start_pos] = []
     pos = start_pos
-    until @cups[start_pos].empty?
+    until stones.empty?
       pos += 1
       pos = 0 if pos > 13
       if pos == 6
