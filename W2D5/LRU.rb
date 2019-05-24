@@ -13,6 +13,9 @@ class LRUCache
   def add(el)
     # adds element to cache according to LRU principle
     @cache.shift if count > @max_size
+    if @cache.include?(el)
+      @cache.delete(@cache.index(el))
+    end
     @cache << el
   end
 
