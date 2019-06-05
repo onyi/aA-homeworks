@@ -1,15 +1,13 @@
 class User < ApplicationRecord
   before_validation(on: :create) do 
-    p "helloworld"
     ensure_session_token
-    p @session_token
   end
 
   validates :username, presence: true
   validates :session_token, presence: true
   validates :password_digest, presence: { message: "Password can't be blank
 "}
-  validates :password, length: { minimum: 8 }, allow_nil: true
+  validates :password, length: { minimum: 8, allow_nil: true }
 
   attr_reader :password
 
@@ -23,16 +21,17 @@ class User < ApplicationRecord
   end
 
   def ensure_session_token
-    @session_token ||= User.generate_session_token
+    self.session_token ||= User.generate_session_token
   end
 
   def reset_session_token!
-    @session_token = User.generate_session_token
+    self.session_token = User.generate_session_token
   end
 
   def password=(password)
     # Encrypts password and save as @pasword_digest
-    @password = BCrypt::Password.create(password)
+    @password = password
+    self.password_digest = BCrypt::Password.create(password)
   end
 
   def is_password?(password)
